@@ -5,7 +5,7 @@ stages:
     - src/data_ingestion.py
     params:
     - data_ingestion.test_size
-    outs: 
+    outs:
     - data/raw
   data_preprocessing:
     cmd: python src/data_preprocessing.py
@@ -16,14 +16,14 @@ stages:
     - data/interim
   feature_engineering:
     cmd: python src/feature_engineering.py
-    deps: 
+    deps:
     - data/interim
     - src/feature_engineering.py
-    params: 
+    params:
     - feature_engineering.max_features
     outs:
     - data/processed
-  model_building: 
+  model_building:
     cmd: python src/model_building.py
     deps:
     - data/processed
@@ -33,10 +33,17 @@ stages:
     - model_building.random_state
     outs:
     - models/model.pkl
-  model_evaluation: 
+  model_evaluation:
     cmd: python src/model_evaluation.py
     deps:
     - models/model.pkl
     - src/model_evaluation.py
     metrics:
     - reports/metrics.json
+params:
+- dvclive/params.yaml
+metrics:
+- dvclive/metrics.json
+plots:
+- dvclive/plots/metrics:
+    x: step
